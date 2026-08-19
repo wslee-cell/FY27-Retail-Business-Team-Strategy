@@ -2699,9 +2699,9 @@ function updateLaunchSummary(){
   const mg = (pf,rv)=> rv>0 ? pct1(pf/rv*100) : '–';
 
   const head = showHalf
-    ? `<tr class="grp"><th class="g-blank"></th><th class="g-blank"></th>
+    ? `<tr class="grp"><th class="g-blank" colspan="2"></th>
          <th class="g-h1" colspan="2">상반기</th><th class="g-h2" colspan="2">하반기</th>
-         <th class="g-tot" colspan="3">${periodLabel('all')}</th><th class="g-blank"></th></tr>
+         <th class="g-tot" colspan="4">${periodLabel('all')}</th></tr>
        <tr class="col"><th>${label}</th><th>출시 건수</th>
          <th class="h1h">매출</th><th class="h1h">공헌이익</th>
          <th class="h2h">매출</th><th class="h2h">공헌이익</th>
