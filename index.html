@@ -204,6 +204,11 @@
     padding:5px 8px; border-bottom:1px solid var(--border); border-right:1px solid var(--border); font-size:12px;
   }
   table.baseline-table tbody tr:nth-child(even){background:var(--row-alt);}
+  /* 공헌이익 기준 입력 시 셀을 구분 */
+  table.baseline-table .bl-m.as-profit{color:#7A6420; font-weight:700;}
+  table.baseline-table .bl-m:disabled{background:#F2F3F5; color:#B9BFC7; cursor:not-allowed;}
+  table.baseline-table td.total-col.tc-profit{background:#F4F0E4 !important; color:#7A6420; font-weight:700;}
+  table.baseline-table thead th.total-col{white-space:nowrap;}
   table.baseline-table tbody input{
     border:none; background:transparent; width:100%; font-size:12px; font-family:'IBM Plex Mono',monospace;
     text-align:right; padding:2px; color:var(--ink);
@@ -262,7 +267,23 @@
   .kpi-mini-bar-fill.under{background:var(--negative);}
 
     #chart-holder, #cmp-split-chart{position:relative;}
+  #chart-headline{
+    display:flex; align-items:center; flex-wrap:wrap; gap:0 10px;
+    padding:9px 14px; margin-bottom:8px; background:#EEF2F7; border-left:3px solid var(--navy);
+  }
+  .hl-item{display:flex; align-items:baseline; gap:6px; font-size:12px;}
+  .hl-k{font-size:10.5px; color:var(--muted); font-weight:600;}
+  .hl-item b{font-family:'IBM Plex Mono',monospace; font-size:15px; color:var(--navy-deep);}
+  .hl-item b.pos{color:var(--positive);} .hl-item b.neg{color:var(--negative);}
+  .hl-sep{color:#C3C9D2;}
+  .hl-rate{
+    margin-left:auto; font-size:11.5px; font-weight:700; padding:3px 10px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .hl-rate.pos{background:#E3F0E8; color:var(--positive);}
+  .hl-rate.neg{background:#FBE9E7; color:var(--negative);}
   .chart-tip{
+    max-width:280px;
     position:absolute; display:none; z-index:20; pointer-events:none;
     background:#fff; border:1px solid var(--navy); box-shadow:0 6px 18px rgba(20,35,60,.18);
     padding:8px 10px; min-width:178px; font-size:11px;
@@ -273,9 +294,10 @@
     color:#fff; background:var(--navy); margin:-8px -10px 7px; padding:4px 10px;
   }
   .chart-tip .ct-r{display:flex; justify-content:space-between; gap:12px; line-height:1.65;}
-  .chart-tip .ct-r span{color:var(--muted);}
+  .chart-tip .ct-r span{color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
   .chart-tip .ct-r b{font-family:'IBM Plex Mono',monospace; color:var(--navy-deep);}
   .chart-tip .ct-r b i{font-style:normal; color:var(--muted); font-size:10px; margin-left:4px;}
+  .chart-tip .ct-dot{display:inline-block; width:7px; height:7px; margin-right:5px; vertical-align:0;}
   .chart-tip .ct-r.tot b{font-size:12px;}
   .chart-tip .ct-r b.pos{color:var(--positive);}
   .chart-tip .ct-r b.neg{color:var(--negative);}
@@ -351,6 +373,19 @@
   #month-groups tr.dragging{opacity:.4;}
   #month-groups tr.drop-above td{box-shadow:inset 0 2px 0 0 var(--navy) !important;}
   #month-groups tr.drop-below td{box-shadow:inset 0 -2px 0 0 var(--navy) !important;}
+  /* 출시월 선택 — 테두리·화살표를 없애 힌트 줄의 일부처럼 읽히게 한다
+     (상자로 두면 폭을 많이 먹어 정작 중요한 요약 수치가 잘린다) */
+  select.p-month{
+    -webkit-appearance:none; -moz-appearance:none; appearance:none;
+    border:none; background:transparent; padding:0; margin:0;
+    font-family:inherit; font-size:inherit; line-height:inherit;
+    color:var(--navy); font-weight:700; cursor:pointer;
+    width:34px; text-align:left;
+    border-bottom:1px dotted var(--border-strong);
+  }
+  select.p-month:hover{color:var(--navy-deep); border-bottom-color:var(--navy);}
+  .mv-suffix{color:var(--muted); margin-left:2px;}
+  select.p-month:focus{outline:none; border-bottom:1px solid var(--navy);}
   .row-hint{
     font-size:9.5px; color:var(--navy-pale); font-family:'IBM Plex Mono',monospace;
     margin-top:1px; letter-spacing:-0.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
@@ -416,11 +451,12 @@
   }
   .bp-seg button:last-child{border-right:1px solid var(--border-strong);}
   .bp-seg button.on{background:var(--navy); color:#fff; border-color:var(--navy);}
-  .bp-item{display:flex; align-items:center; margin-right:20px; cursor:pointer; user-select:none; white-space:nowrap; flex:0 0 auto;}
+  .bp-items{display:flex; align-items:center; flex-wrap:wrap; gap:0 4px;}
+  .bp-item{display:flex; align-items:center; margin-right:14px; cursor:pointer; user-select:none; white-space:nowrap; flex:0 0 auto;}
   .bp-item input{margin-right:5px; cursor:pointer;}
   .bp-lab{color:var(--muted); margin-right:6px; white-space:nowrap;}
   .bp-item b{font-family:'IBM Plex Mono',monospace; color:var(--navy-deep); margin-right:7px; white-space:nowrap;}
-  .bp-cnt{font-size:10px; color:var(--warning); background:#FBF1DC; padding:1px 5px; white-space:nowrap;}
+  .bp-cnt{font-size:9.5px; color:var(--warning); background:#FBF1DC; padding:1px 4px; white-space:nowrap;}
   .bp-cnt.none{color:var(--muted); background:#E7EAEE;}
   .bp-act{display:flex; align-items:center; margin-left:auto; white-space:nowrap; flex:0 0 auto;}
   .bp-hint{font-size:10px; color:var(--muted); margin-right:10px;}
@@ -677,6 +713,7 @@
         <button data-u="eok" class="active">억원</button>
         <button data-u="cheon">천만원</button>
         <button data-u="baekman">백만원</button>
+      <button data-u="won">원</button>
       </div>
       <div class="period-toggle" id="period-toggle">
         <button data-p="all" class="active">전체(1~12월)</button>
@@ -691,7 +728,7 @@
 <main>
 
   <div class="unit-legend">
-    <b>단위</b> · 매출·이익은 우측 상단에서 <b>억원 / 천만원 / 백만원</b> 중 선택해 볼 수 있습니다 (기본 억원). 우측 <b>부가세 제외</b>를 켜면 판매단가·광고비·배송비·베이스라인 매출이 모두 <b>공급가(÷1.1)</b>로 표시·입력·계산됩니다. 입력값도 함께 환산되므로 화면 숫자와 계산 결과가 항상 일치합니다. 선택한 단위는 <b>베이스라인 입력값과 모든 집계</b>에 적용됩니다. <b>연간 목표는 억원</b>, 판매단가·광고비·배송비는 <b>원(₩)</b> 고정입니다.
+    <b>단위</b> · 매출·이익은 우측 상단에서 <b>억원 / 천만원 / 백만원</b> 중 선택해 볼 수 있습니다 (기본 억원). <b>베이스라인</b>은 실적 시트 기준인 <b>부가세 제외(공급가)</b>로, <b>제품 단가·광고비·배송비</b>는 판매처 기준인 <b>부가세 포함</b>으로 입력합니다. 우측 <b>부가세 제외</b> 토글은 두 기준을 맞춰 한쪽으로 환산해 보여줍니다. 선택한 단위는 <b>베이스라인 입력값과 모든 집계</b>에 적용됩니다. <b>연간 목표는 억원</b>, 판매단가·광고비·배송비는 <b>원(₩)</b> 고정입니다.
   </div>
 
   <!-- ============ TAB: 입력 ============ -->
@@ -702,24 +739,7 @@
       <div class="sec-head"><span class="idx">01</span><h2>연간 목표 및 상·하반기 배분</h2></div>
       <div class="panel">
         <div class="goal-cards">
-        <div class="goal-card">
-          <div class="gc-label">연간 매출 목표</div>
-          <div class="gc-hero"><input class="gc-annual" id="g-rev" type="text" inputmode="decimal" /><span class="gc-unit">억원</span></div>
-          <div class="gc-split">
-            상반기 <input class="gc-part" id="h1-rev" type="text" inputmode="decimal" />
-            <span class="gc-sep">·</span>
-            하반기 <input class="gc-part" id="h2-rev" type="text" inputmode="decimal" />
-          </div>
-          <div class="gc-bar-row">
-            <span class="split-bar" id="bar-rev"><span class="sb-h1"></span><span class="sb-h2"></span></span>
-            <span class="gc-ratio" id="ratio-rev"></span><span class="gc-tag">목표</span>
-          </div>
-          <div class="gc-bar-row">
-            <span class="split-bar plan" id="barp-rev"><span class="sb-h1"></span><span class="sb-h2"></span></span>
-            <span class="gc-ratio" id="ratiop-rev"></span><span class="gc-tag plan">계획</span>
-          </div>
-        </div>
-        <div class="goal-card">
+          <div class="goal-card">
           <div class="gc-label">연간 공헌이익 목표</div>
           <div class="gc-hero"><input class="gc-annual" id="g-profit" type="text" inputmode="decimal" /><span class="gc-unit">억원</span></div>
           <div class="gc-split">
@@ -736,8 +756,25 @@
             <span class="gc-ratio" id="ratiop-profit"></span><span class="gc-tag plan">계획</span>
           </div>
         </div>
-      </div>
-      <div class="gc-foot">
+          <div class="goal-card">
+          <div class="gc-label">연간 매출 목표</div>
+          <div class="gc-hero"><input class="gc-annual" id="g-rev" type="text" inputmode="decimal" /><span class="gc-unit">억원</span></div>
+          <div class="gc-split">
+            상반기 <input class="gc-part" id="h1-rev" type="text" inputmode="decimal" />
+            <span class="gc-sep">·</span>
+            하반기 <input class="gc-part" id="h2-rev" type="text" inputmode="decimal" />
+          </div>
+          <div class="gc-bar-row">
+            <span class="split-bar" id="bar-rev"><span class="sb-h1"></span><span class="sb-h2"></span></span>
+            <span class="gc-ratio" id="ratio-rev"></span><span class="gc-tag">목표</span>
+          </div>
+          <div class="gc-bar-row">
+            <span class="split-bar plan" id="barp-rev"><span class="sb-h1"></span><span class="sb-h2"></span></span>
+            <span class="gc-ratio" id="ratiop-rev"></span><span class="gc-tag plan">계획</span>
+          </div>
+        </div>
+        </div>
+        <div class="gc-foot">
         <span class="gc-foot-label">목표 공헌이익률</span>
         연간 <b id="mg-year"></b><span class="gc-sep">·</span>상반기 <b id="mg-h1"></b><span class="gc-sep">·</span>하반기 <b id="mg-h2"></b>
         <span class="gc-hint">모든 숫자 직접 입력 가능 · 한쪽을 바꾸면 나머지가 자동 보정</span>
@@ -777,7 +814,11 @@
     </div>
 
     <div class="sec">
-      <div class="sec-head"><span class="idx">03</span><h2>브랜드별 기존 매출 베이스라인</h2><span class="desc" id="baseline-desc"></span></div>
+      <div class="sec-head"><span class="idx">03</span><h2>브랜드별 기존 베이스라인</h2>
+        <div class="basis-toggle" id="bl-basis-toggle">
+          <button data-b="profit" class="active">공헌이익</button>
+          <button data-b="rev">매출</button>
+        </div><span class="desc" id="baseline-desc"></span></div>
       <div class="note-line" style="margin-bottom:8px;" id="baseline-unit-note"></div>
       <div class="panel" style="padding:0;">
         <div class="table-scroll">
@@ -830,13 +871,15 @@
           <button data-b="rev">매출</button>
         </div>
         <div class="basis-toggle" id="view-toggle">
-          <button data-v="month" class="active">월별</button>
-          <button data-v="cum">누적 진도</button>
+          <button data-v="gap" class="active">목표 갭</button>
+          <button data-v="product">제품별</button>
+          <button data-v="month">월별 실적</button>
         </div>
         <span class="desc" id="chart-scope-desc"></span></div>
       <div class="panel">
         <div class="chart-legend" id="chart-legend"></div>
-        <div id="chart-holder"></div>
+        <div id="chart-headline"></div>
+      <div id="chart-holder"></div>
       </div>
     </div>
 
@@ -876,8 +919,8 @@
     <div class="sec">
       <div class="sec-head"><span class="idx">09</span><h2>출시 로드맵</h2>
         <div class="basis-toggle" id="road-toggle">
-          <button data-r="rev" class="active">매출</button>
-          <button data-r="profit">공헌이익</button>
+          <button data-r="profit" class="active">공헌이익</button>
+          <button data-r="rev">매출</button>
           <button data-r="qty">수량</button>
         </div>
         <span class="desc" id="road-desc"></span></div>
@@ -996,13 +1039,14 @@ const DEFAULT_STATE = {
   viewPeriod: 'all',
   activeTab: 'input',
   unit: 'eok',
-  vatExcl: false,
+  vatExcl: true,   // 회사 판단 기준이 부가세 제외 — 기본 보기
   chartBasis: 'profit',
-  chartView: 'month',
+  chartView: 'gap',
   cmpBasis: 'profit',
+  blBasis: 'profit',
   monthSort: 'recent',
   sumDim: 'type',
-  roadMode: 'rev',
+  roadMode: 'profit',
   showIdle: {},
   collapsed: {},
   /* 베이스라인 기본값: 26H1 실적(얼라인랩 24.7억 / 슬룸·셀올로지 7.8억 / 투엘브어클락 3.1억)의
@@ -1103,7 +1147,7 @@ const UNDO_MAX = 50;
 let undoStack = [], redoStack = [];
 let lastCommitted = null, pendingLabel = null, isRestoring = false;
 /* 보기 설정은 데이터가 아니므로 실행 취소로 되돌리지 않는다 */
-const VIEW_KEYS = ['unit','viewPeriod','activeTab','roadMode','monthSort','sumDim','chartBasis','chartView','cmpBasis','collapsed','showIdle','vatExcl','scenLinked'];
+const VIEW_KEYS = ['unit','viewPeriod','activeTab','roadMode','monthSort','blBasis','sumDim','chartBasis','chartView','cmpBasis','collapsed','showIdle','vatExcl','scenLinked'];
 
 function markAction(label){ pendingLabel = label; }
 /* 저장 타임스탬프(updatedAt)는 데이터가 아니므로 스냅샷에서 제외한다.
@@ -1353,6 +1397,13 @@ function normalizeState(parsed){
     ? toArr(s.baseline)
     : JSON.parse(JSON.stringify(DEFAULT_STATE.baseline));
   s.products = (parsed && parsed.products !== undefined) ? toArr(s.products) : [];
+  /* 베이스라인 월 금액을 원 단위로 정리한다.
+     공헌이익 기준 입력은 '이익 ÷ 이익률' 역산이라 11.296296296… 같은 무한소수가 남고,
+     그 값이 모든 단위 표시에 소수점으로 번진다. */
+  s.baseline.forEach(b=>{
+    b.monthly = toArr(b.monthly);
+    for(let i=0;i<12;i++) b.monthly[i] = roundTo(numVal(b.monthly[i]), 8);
+  });
   if(!s.viewPeriod) s.viewPeriod = 'all';
   if(!s.activeTab) s.activeTab = 'input';
   s.vatExcl = !!s.vatExcl;
@@ -1369,11 +1420,13 @@ function normalizeState(parsed){
   if(s.unit === 'man') s.unit = 'baekman';   // 구버전 호환
   if(!UNITS[s.unit]) s.unit = 'eok';
   if(s.chartBasis!=='rev' && s.chartBasis!=='profit') s.chartBasis = 'profit';
-  if(s.chartView!=='month' && s.chartView!=='cum') s.chartView = 'month';
+  if(s.chartView==='cum') s.chartView = 'gap';   // 누적 진도는 목표 갭에 흡수
+  if(!['gap','month','product'].includes(s.chartView)) s.chartView = 'gap';
   if(s.cmpBasis!=='rev' && s.cmpBasis!=='profit') s.cmpBasis = 'profit';
+  if(s.blBasis!=='profit' && s.blBasis!=='rev') s.blBasis = 'profit';
   if(!['recent','oldest','margin'].includes(s.monthSort)) s.monthSort = 'recent';
   if(!['type','brand','month'].includes(s.sumDim)) s.sumDim = 'type';
-  if(!['rev','profit','qty'].includes(s.roadMode)) s.roadMode = 'rev';
+  if(!['rev','profit','qty'].includes(s.roadMode)) s.roadMode = 'profit';
   // 12개월 배열 보정 + id 중복 제거
   const seenB = new Set();
   s.baseline = s.baseline.filter(b=>{
@@ -1412,8 +1465,21 @@ function normalizeState(parsed){
       p = {...p, monthlyQty:mq, monthlyAd:ma};
     }
     delete p.qty; delete p.adCost; delete p.allocMode; delete p.manualPct;
-    p.monthlyQty = toMap(p.monthlyQty);
-    p.monthlyAd  = toMap(p.monthlyAd);
+    p.monthlyQty  = toMap(p.monthlyQty);
+    p.monthlyAd   = toMap(p.monthlyAd);
+    p.monthlyCost = toMap(p.monthlyCost);
+    p.monthlyFee  = toMap(p.monthlyFee);
+    p.monthlyShip = toMap(p.monthlyShip);
+    /* 비율이 단위 변환으로 증폭된 값(예: 30 -> 300000)이 저장돼 있으면 되돌린다.
+       원가율·수수료율이 200%를 넘는 일은 실무상 없다. */
+    const sane = (map, fallback, limit)=>{
+      Object.keys(map).forEach(k=>{
+        const v = numVal(map[k]);
+        if(v > limit || v < 0) map[k] = numVal(fallback);
+      });
+    };
+    sane(p.monthlyCost, p.costRate, 200);   // 원가율: 적자 판매로 100% 초과는 가능, 200%는 비정상
+    sane(p.monthlyFee,  p.feeRate,  100);   // 수수료율: 채널 수수료가 100%를 넘을 수 없음
     /* 채널 수수료율: 기존 데이터에는 없던 항목이라 카카오선물하기 기본 15%로 채운다 */
     if(p.feeRate === undefined || p.feeRate === '') p.feeRate = 15;
     /* 판매기간에 해당하는 월 슬롯을 미리 채워둔다 (렌더 시점에 건드리지 않도록) */
@@ -1496,7 +1562,8 @@ function eok(n){ return (Math.round(n*100)/100).toFixed(2); }
 const UNITS = {
   eok:    {label:'억원',   mul:1,   dec:1},
   cheon:  {label:'천만원', mul:10,  dec:1},
-  baekman:{label:'백만원', mul:100, dec:0}
+  baekman:{label:'백만원', mul:100, dec:0},
+  won:    {label:'원',     mul:1e8, dec:0}      // 회계 서식 — 전체 금액을 원 단위로
 };
 function unitDef(){ return UNITS[state && state.unit ? state.unit : 'eok'] || UNITS.eok; }
 function unitLabel(){ return unitDef().label; }
@@ -1506,9 +1573,15 @@ function unitLabel(){ return unitDef().label; }
    내부 저장은 항상 부가세 포함가. */
 function wonToDisp(v){ const d = vatDiv(); return d === 1 ? numVal(v) : Math.round(numVal(v)/d); }
 function wonFromDisp(v){ const d = vatDiv(); return d === 1 ? numVal(v) : numVal(v)*d; }
-function toDisp(eokVal){ return (eokVal||0) / vatDiv() * unitDef().mul; }
-function fromDisp(v){ return numVal(v) * vatDiv() / unitDef().mul; }
+function toDisp(eokVal){ return (eokVal||0) / blVatDiv() * unitDef().mul; }
+function fromDisp(v){ return numVal(v) * blVatDiv() / unitDef().mul; }
 /* 입력칸 표시용: 불필요한 소수점 제거 */
+/* 비율(%) 전용 표시 — 금액 단위 변환을 적용하면 안 된다.
+   (단위를 바꿀 때마다 값이 곱해지고, 그 상태로 편집하면 저장까지 되어 증폭된다) */
+function pctNum(v){
+  const r = Math.round(numVal(v)*100)/100;
+  return String(r);
+}
 function dispNum(eokVal){
   const v = toDisp(eokVal);
   const r = Math.round(v*100)/100;
@@ -1531,17 +1604,29 @@ function fmtDetail(eokVal){
 }
 /* 베이스라인 표: 입력값 기준으로 손검산이 맞아야 하므로 입력 정밀도를 유지 (7.05 -> 7.05) */
 /* 파생값(이익합계)은 소수 2자리까지만 */
-function fmtBase2(eokVal){
+/* 단위마다 의미 있는 최소 자리가 다르다.
+   원은 최소 화폐 단위라 소수점이 없어야 하고, 억원은 손검산을 위해 소수를 남긴다.
+   (이익으로 베이스라인을 입력하면 매출이 이익÷이익률로 역산되며 무한소수가 생긴다) */
+/* 셀과 합계가 같은 자리수를 써야 눈으로 더한 값이 합계와 맞는다.
+   단위별로 '실무에서 의미 있는 최소 자리'까지만 보여준다. */
+function baseDec(){
   const u = unitDef();
-  const r = Math.round((eokVal||0) / vatDiv() * u.mul * 100) / 100;
-  return r.toLocaleString('ko-KR', {maximumFractionDigits:2});
+  if(u.mul >= 1e8) return 0;    // 원      : 1원
+  if(u.mul >= 100) return 1;    // 백만원  : 10만원
+  if(u.mul >= 10)  return 2;    // 천만원  : 10만원
+  return 2;                      // 억원    : 100만원
 }
-function fmtBase(eokVal){
+/* 베이스라인 셀 표시값 — 단위별 자리수로 반올림 */
+function blCellNum(eokVal){
+  return String(roundTo(toDisp(eokVal), baseDec()));
+}
+function fmtBaseAt(eokVal, dec){
   const u = unitDef();
-  const v = (eokVal||0) / vatDiv() * u.mul;
-  const r = Math.round(v*1000)/1000;
-  return r.toLocaleString('ko-KR', {maximumFractionDigits:3});
+  const r = roundTo((eokVal||0) / blVatDiv() * u.mul, dec);
+  return r.toLocaleString('ko-KR', {maximumFractionDigits:dec});
 }
+function fmtBase2(eokVal){ return fmtBaseAt(eokVal, Math.min(2, baseDec())); }
+function fmtBase(eokVal){  return fmtBaseAt(eokVal, baseDec()); }
 /* 목표처럼 사용자가 입력한 값은 불필요한 소수점 없이 (150억 / 1,500천만원) */
 /* 이익률 표기: -0.0% 같은 표기 방지 */
 function pct1(v){ const r = Math.round((v||0)*10)/10; return (r===0?0:r).toFixed(1)+'%'; }
@@ -1574,7 +1659,11 @@ const scenOf = m => numVal(Number(m) <= 6 ? state.scenH1 : state.scenH2) / 100;
 const scen = ()=> scenOf(1);   // 월 정보가 없는 곳의 호환용 (상반기 기준)
 /* 부가세 제외 모드: 입력한 금액을 부가세 포함가로 보고 1.1로 나눠 공급가(순액)로 환산 */
 const VAT = 1.1;
-const vatDiv = ()=> (state && state.vatExcl) ? VAT : 1;
+/* 제품(단가·광고비·배송비)은 판매처 기준 = 부가세 포함가로 입력한다.
+   베이스라인(실적 시트)은 회사 기준 = 부가세 제외(공급가)로 입력한다.
+   저장 기준이 다르므로 환산도 달라야 한다. */
+const vatDiv   = ()=> (state && state.vatExcl) ? VAT : 1;      // 제품: 제외 보기에서 ÷1.1
+const blVatDiv = ()=> (state && state.vatExcl) ? 1 : (1/VAT);  // 베이스라인: 포함 보기에서 ×1.1
 
 /* 제품은 출시월부터 판매기간(개월) 동안 매월 한 행씩 나타나며,
    각 달의 판매수량·광고비를 직접 입력해 조절한다. */
@@ -1590,13 +1679,18 @@ function monthAd(p,m){ return numVal((p.monthlyAd||{})[m]); }
 /* 특정 월의 매출/이익 */
 /* 월 공헌이익 = 매출 − 원가 − 채널수수료 − 광고비 − 배송비
    채널수수료: 카카오선물하기 기본 15% (제품별로 채널이 다르면 수수료율만 바꾸면 됨) */
+/* 원가율·수수료율·배송비는 월별로 다를 수 있다(원자재 변동, 채널 변경, 배송정책).
+   월 값이 없으면 제품 기본값을 쓴다. */
+function monthCost(p,m){ const v = p.monthlyCost && p.monthlyCost[m]; return (v===undefined||v==='') ? numVal(p.costRate) : numVal(v); }
+function monthFee(p,m){  const v = p.monthlyFee  && p.monthlyFee[m];  return (v===undefined||v==='') ? numVal(p.feeRate)  : numVal(v); }
+function monthShip(p,m){ const v = p.monthlyShip && p.monthlyShip[m]; return (v===undefined||v==='') ? numVal(p.shippingPerUnit) : numVal(v); }
 function monthFigures(p,m){
   const q = monthQty(p,m);
   const revRaw = (numVal(p.price) / vatDiv() * q) / 1e8;
-  const cogs = revRaw * (numVal(p.costRate)/100);
-  const fee  = revRaw * (numVal(p.feeRate)/100);
+  const cogs = revRaw * (monthCost(p,m)/100);
+  const fee  = revRaw * (monthFee(p,m)/100);
   const ad   = monthAd(p,m) / vatDiv() / 1e8;
-  const ship = (q * numVal(p.shippingPerUnit) / vatDiv()) / 1e8;
+  const ship = (q * monthShip(p,m) / vatDiv()) / 1e8;
   const profitRaw = revRaw - cogs - fee - ad - ship;
   const s = scenOf(m);
   return {
@@ -1621,15 +1715,19 @@ function isBlankProduct(p){
   if(String(p.name||'').trim() !== '') return false;
   return !prodMonths(p).some(m=>monthQty(p,m) > 0);
 }
+const MONTHLY_MAPS = ['monthlyQty','monthlyAd','monthlyCost','monthlyFee','monthlyShip'];
 function ensureMonthly(p){
   const ms = prodMonths(p);
-  if(!p.monthlyQty) p.monthlyQty = {};
-  if(!p.monthlyAd) p.monthlyAd = {};
-  Object.keys(p.monthlyQty).forEach(k=>{ if(!ms.includes(Number(k))) delete p.monthlyQty[k]; });
-  Object.keys(p.monthlyAd).forEach(k=>{ if(!ms.includes(Number(k))) delete p.monthlyAd[k]; });
+  MONTHLY_MAPS.forEach(k=>{
+    if(!p[k]) p[k] = {};
+    Object.keys(p[k]).forEach(x=>{ if(!ms.includes(Number(x))) delete p[k][x]; });
+  });
   ms.forEach(m=>{
-    if(p.monthlyQty[m] === undefined) p.monthlyQty[m] = 0;
-    if(p.monthlyAd[m] === undefined) p.monthlyAd[m] = 0;
+    if(p.monthlyQty[m]  === undefined) p.monthlyQty[m]  = 0;
+    if(p.monthlyAd[m]   === undefined) p.monthlyAd[m]   = 0;
+    if(p.monthlyCost[m] === undefined) p.monthlyCost[m] = numVal(p.costRate);
+    if(p.monthlyFee[m]  === undefined) p.monthlyFee[m]  = numVal(p.feeRate);
+    if(p.monthlyShip[m] === undefined) p.monthlyShip[m] = numVal(p.shippingPerUnit);
   });
 }
 /* 값 자동 채움은 두지 않는다.
@@ -1642,38 +1740,41 @@ function ensureMonthly(p){
 /* 균등: 버튼을 누른 '그 달'의 수량·광고비를 그 달부터 판매기간 끝까지 동일하게 적용.
    출시월에서 누르면 전체가 채워지고, 3월에서 누르면 3~12월만 갱신되어
    앞선 달(1~2월) 값은 보존된다. */
+const BULK_ITEMS = [
+  {key:'qty',  map:'monthlyQty',  label:'수량',     get:(p,m)=>monthQty(p,m),   fmt:v=>won(v)+'개'},
+  {key:'ad',   map:'monthlyAd',   label:'광고비',   get:(p,m)=>monthAd(p,m),    fmt:v=>won(wonToDisp(v))+'원'},
+  {key:'cost', map:'monthlyCost', label:'원가율',   get:(p,m)=>monthCost(p,m),  fmt:v=>pctNum(v)+'%'},
+  {key:'fee',  map:'monthlyFee',  label:'수수료율', get:(p,m)=>monthFee(p,m),   fmt:v=>pctNum(v)+'%'},
+  {key:'ship', map:'monthlyShip', label:'배송비',   get:(p,m)=>monthShip(p,m),  fmt:v=>won(wonToDisp(v))+'원/개'}
+];
 function spreadPlan(p, fromMonth, scope){
   const ms = prodMonths(p);
   if(!ms.length) return null;
   let from = Number(fromMonth);
   let idx = ms.indexOf(from);
   if(idx < 0){ idx = 0; from = ms[0]; }
-  /* 기준값은 항상 '버튼을 누른 달'의 값 */
-  let q = monthQty(p, from), a = monthAd(p, from);
-  if(q === 0){
-    const f = ms.slice(idx).find(m=>monthQty(p,m) > 0) ?? ms.slice(0,idx).reverse().find(m=>monthQty(p,m) > 0);
-    if(f !== undefined) q = monthQty(p,f);
-  }
-  if(a === 0){
-    const f = ms.slice(idx).find(m=>monthAd(p,m) > 0) ?? ms.slice(0,idx).reverse().find(m=>monthAd(p,m) > 0);
-    if(f !== undefined) a = monthAd(p,f);
-  }
-  /* 범위: 'after' = 이 달부터 끝까지, 'all' = 판매기간 전체 */
   const targets = (scope === 'all') ? ms.slice() : ms.slice(idx);
-  return {
-    q, a, from, scope: scope||'after',
-    rangeFrom: targets[0], rangeTo: targets[targets.length-1], targets,
-    qChanged: targets.filter(m=> numVal(p.monthlyQty[m]) !== q),
-    aChanged: targets.filter(m=> numVal(p.monthlyAd[m])  !== a)
-  };
+  const vals = {}, changed = {};
+  BULK_ITEMS.forEach(it=>{
+    let v = it.get(p, from);
+    /* 수량·광고비는 기준 달이 비어 있으면 가까운 유효값을 찾는다 (비율·배송비는 0도 유효) */
+    if((it.key==='qty' || it.key==='ad') && v === 0){
+      const f = ms.slice(idx).find(mm=>it.get(p,mm) > 0) ?? ms.slice(0,idx).reverse().find(mm=>it.get(p,mm) > 0);
+      if(f !== undefined) v = it.get(p,f);
+    }
+    vals[it.key] = v;
+    changed[it.key] = targets.filter(mm=> numVal(it.get(p,mm)) !== numVal(v));
+  });
+  return { vals, changed, from, scope: scope||'after',
+           rangeFrom: targets[0], rangeTo: targets[targets.length-1], targets };
 }
 function spreadApply(p, plan, opt){
+  ensureMonthly(p);
   plan.targets.forEach(m=>{
-    if(opt.qty) p.monthlyQty[m] = plan.q;
-    if(opt.ad)  p.monthlyAd[m]  = plan.a;
+    BULK_ITEMS.forEach(it=>{ if(opt[it.key]) p[it.map][m] = plan.vals[it.key]; });
   });
 }
-function baselineRevOf(b, months){ return months.reduce((s,m)=>s+numVal(b.monthly[m-1])*scenOf(m),0) / vatDiv(); }
+function baselineRevOf(b, months){ return months.reduce((s,m)=>s+numVal(b.monthly[m-1])*scenOf(m),0) / blVatDiv(); }
 function baselineProfitOf(b, months){ return baselineRevOf(b, months) * (numVal(b.marginRate)/100); }
 function baselineTotals(months){
   let rev=0, profit=0;
@@ -1759,7 +1860,9 @@ function syncControls(){
   document.getElementById('brand-scope-desc').textContent = lab + ' · 이익 기준 정렬 · ' + unitLabel();
   document.getElementById('baseline-desc').textContent = lab;
   const bun = document.getElementById('baseline-unit-note');
-  if(bun) bun.innerHTML = `※ 월별 매출·합계는 <b>${unitLabel()}</b> 단위, 이익률은 % 단위입니다. 신규 출시분은 여기 포함하지 않습니다. 브랜드명 왼쪽 <b>⠿</b>를 잡고 끌면 순서를 바꿀 수 있고, 이 순서가 비교표·차트에도 반영됩니다.`
+  document.querySelectorAll('#bl-basis-toggle button').forEach(b=>
+    b.classList.toggle('active', b.dataset.b===(state.blBasis||'profit')));
+  if(bun) bun.innerHTML = `※ 현재 <b>${(state.blBasis||'profit')==='profit'?'공헌이익':'매출'}</b> 기준으로 월별 값을 입력합니다. 공헌이익으로 입력하면 이익률로 매출이 자동 역산됩니다. 단위는 <b>${unitLabel()}</b>, 이익률은 %입니다. 신규 출시분은 여기 포함하지 않습니다. 브랜드명 왼쪽 <b>⠿</b>를 잡고 끌면 순서를 바꿀 수 있고, 이 순서가 비교표·차트에도 반영됩니다.`
     + (state.vatExcl ? ' <b style="color:var(--warning)">부가세 제외 기준(÷1.1)으로 표시·계산됩니다.</b>' : '');
 }
 function setIfNotFocused(id, val){
@@ -1866,12 +1969,17 @@ function moveBrand(fromId, targetId, placeAfter){
 }
 function buildBaselineTable(){
   const months = activeMonths();
+  const blIsProfit = (state.blBasis || 'profit') === 'profit';
+  /* 기준 토글의 활성 표시는 표를 다시 그릴 때마다 함께 맞춘다
+     (토글 핸들러는 syncControls 를 거치지 않으므로 여기서 처리해야 한다) */
+  document.querySelectorAll('#bl-basis-toggle button').forEach(b=>
+    b.classList.toggle('active', b.dataset.b === state.blBasis));
   document.getElementById('baseline-thead').innerHTML = `
     <th style="min-width:130px;">브랜드</th>
     <th style="min-width:52px;">이익률%</th>
-    ${months.map(m=>`<th style="min-width:56px;">${m}월</th>`).join('')}
-    <th class="total-col" style="min-width:78px;">매출합계</th>
-    <th class="total-col" style="min-width:78px;">이익합계</th>
+    ${months.map(m=>`<th style="min-width:62px;">${m}월</th>`).join('')}
+    <th class="total-col" style="min-width:80px;">이익합계</th>
+    <th class="total-col" style="min-width:80px;">매출합계</th>
     <th style="width:26px;"></th>`;
 
   const tbody = document.getElementById('baseline-tbody');
@@ -1884,17 +1992,46 @@ function buildBaselineTable(){
         <input class="brand-name-inp" value="${escAttr(b.name)}" />
       </td>
       <td><input class="bl-margin" inputmode="decimal" value="${b.marginRate}" /></td>
-      ${months.map(m=>`<td><input class="bl-m" inputmode="decimal" data-mi="${m-1}" value="${wonDisplay(dispNum(numVal(b.monthly[m-1])))}" /></td>`).join('')}
+      ${months.map(m=>{
+        const rev = numVal(b.monthly[m-1]);
+        const mr  = numVal(b.marginRate)/100;
+        const shown = blIsProfit ? rev*mr : rev;
+        const dis = blIsProfit && mr<=0;
+        return `<td><input class="bl-m${blIsProfit?' as-profit':''}" inputmode="decimal" data-mi="${m-1}"
+          value="${wonDisplay(blCellNum(shown))}" ${dis?'disabled title="이익률이 0이면 이익으로 입력할 수 없습니다"':''} /></td>`;
+      }).join('')}
+      <td class="total-col tc-profit" data-role="bl-profit"></td>
       <td class="total-col" data-role="bl-rev"></td>
-      <td class="total-col" data-role="bl-profit"></td>
       <td class="bl-act"><button class="del-btn" title="이 브랜드 행 삭제">×</button></td>`;
     tbody.appendChild(tr);
 
     wireTextInput(tr.querySelector('.brand-name-inp'), v=>{ b.name = v; updateDerived(); scheduleSave(); });
-    tr.querySelector('.bl-margin').addEventListener('input', e=>{ b.marginRate = e.target.value; updateDerived(); scheduleSave(); });
+    tr.querySelector('.bl-margin').addEventListener('input', e=>{
+      b.marginRate = e.target.value;
+      /* 공헌이익 기준에서는 이익률이 바뀌면 셀 값(=이익)과 입력 가능 여부가 달라진다 */
+      if(blIsProfit){
+        const mr = numVal(b.marginRate)/100;
+        tr.querySelectorAll('.bl-m').forEach(inp=>{
+          if(document.activeElement === inp) return;        // 입력 중인 칸은 건드리지 않음
+          const rev = numVal(b.monthly[Number(inp.dataset.mi)]);
+          inp.value = wonDisplay(blCellNum(rev*mr));
+          inp.disabled = !(mr > 0);
+          inp.title = mr > 0 ? '' : '이익률이 0이면 이익으로 입력할 수 없습니다';
+        });
+      }
+      updateDerived(); scheduleSave();
+    });
     tr.querySelectorAll('.bl-m').forEach(inp=>{
       wireUnitInput(inp, v=>{
-        b.monthly[Number(inp.dataset.mi)] = fromDisp(v);
+        const val = fromDisp(v);
+        if(blIsProfit){
+          /* 이익으로 입력받아 매출을 역산한다 (매출 = 이익 ÷ 이익률) */
+          const mr = numVal(b.marginRate)/100;
+          /* 이익 ÷ 이익률은 무한소수가 되기 쉬우므로 원 단위(억원 8자리)로 맞춰 저장한다 */
+          if(mr > 0) b.monthly[Number(inp.dataset.mi)] = roundTo(val / mr, 8);
+        }else{
+          b.monthly[Number(inp.dataset.mi)] = val;
+        }
         updateDerived(); scheduleSave();
       });
     });
@@ -1941,15 +2078,22 @@ function updateBaselineDerived(){
   [...tbody.children].forEach(tr=>{
     const b = tr._blRow; if(!b) return;
     // 이 표는 '입력한 원본값' 기준으로 보여준다 (시나리오는 하단 집계/차트에만 반영)
+    /* 합계는 반드시 실제 저장값으로 계산한다 — KPI·차트 집계와 어긋나면 안 된다 */
     const rawRev = months.reduce((s,m)=>s+numVal(b.monthly[m-1]),0);  // 억원 기준
     tr.querySelector('[data-role="bl-rev"]').textContent = fmtBase(rawRev);
     tr.querySelector('[data-role="bl-profit"]').textContent = fmtBase2(rawRev * (numVal(b.marginRate)/100));
+
   });
   const monthTotals = months.map(m=> state.baseline.reduce((s,b)=>s+numVal(b.monthly[m-1]),0));
   const grandRev = monthTotals.reduce((s,v)=>s+v,0);
   const grandProfit = state.baseline.reduce((s,b)=> s + months.reduce((ss,m)=>ss+numVal(b.monthly[m-1]),0)*(numVal(b.marginRate)/100), 0);
   document.getElementById('baseline-tfoot').innerHTML =
-    `<td>합계</td><td></td>${monthTotals.map(v=>`<td>${fmtBase(v)}</td>`).join('')}<td>${fmtBase(grandRev)}</td><td>${fmtBase2(grandProfit)}</td><td></td>`;
+    `<td>합계</td><td></td>${months.map((m,i)=>{
+       const v = (state.blBasis||'profit')==='profit'
+         ? state.baseline.reduce((s,b)=>s+numVal(b.monthly[m-1])*(numVal(b.marginRate)/100), 0)
+         : monthTotals[i];
+       return `<td>${(state.blBasis||'profit')==='profit' ? fmtBase2(v) : fmtBase(v)}</td>`;
+     }).join('')}<td class="tc-profit">${fmtBase2(grandProfit)}</td><td>${fmtBase(grandRev)}</td><td></td>`;
 }
 document.getElementById('add-baseline-row').addEventListener('click', ()=>{
   commitUndo(); markAction('브랜드 행 추가');
@@ -1964,30 +2108,27 @@ let dragProdId = null;
     같은 출시월끼리는 state.products 배열 순서를 따른다) */
 /* '이후 일괄' 패널 — 수량/광고비를 항목별로 골라 적용한다.
    confirm 창으로는 항목 선택을 표현할 수 없어 행 아래 인라인 패널로 띄운다. */
-let bulkOpts = { qty:true, ad:true, scope:'after' };
+let bulkOpts = { qty:true, ad:true, cost:false, fee:false, ship:false, scope:'after' };
 function closeBulkPanel(){
   document.querySelectorAll('tr.bulk-panel').forEach(el=>el.remove());
 }
 function openBulkPanel(tr, p, m){
   const existing = tr.nextElementSibling;
-  const wasMine = existing && existing.classList.contains('bulk-panel');
+  const wasMine = existing && existing.classList.contains('bulk-panel') && !existing.dataset.kind;
   closeBulkPanel();
   if(wasMine) return;
-  const cols = tr.children.length;
   const row = document.createElement('tr');
   row.className = 'bulk-panel';
-  row.innerHTML = `<td colspan="${cols}"><div class="bp-box">
+  row.innerHTML = `<td colspan="${tr.children.length}"><div class="bp-box">
       <div class="bp-title">${m}월 값 일괄 적용</div>
       <div class="bp-seg" data-role="bp-scope">
         <button data-sc="after">이 달부터</button>
         <button data-sc="all">전체 기간</button>
       </div>
-      <label class="bp-item"><input type="checkbox" class="bp-q" />
-        <span class="bp-lab">수량</span><b data-role="bp-qv"></b>
-        <span class="bp-cnt" data-role="bp-qc"></span></label>
-      <label class="bp-item"><input type="checkbox" class="bp-a" />
-        <span class="bp-lab">광고비</span><b data-role="bp-av"></b>
-        <span class="bp-cnt" data-role="bp-ac"></span></label>
+      <div class="bp-items">${BULK_ITEMS.map(it=>
+        `<label class="bp-item"><input type="checkbox" class="bp-c" data-k="${it.key}" />
+          <span class="bp-lab">${it.label}</span><b data-role="v-${it.key}"></b>
+          <span class="bp-cnt" data-role="c-${it.key}"></span></label>`).join('')}</div>
       <div class="bp-act">
         <span class="bp-hint" data-role="bp-hint"></span>
         <button class="bp-cancel">취소</button>
@@ -1995,45 +2136,105 @@ function openBulkPanel(tr, p, m){
       </div></div></td>`;
   tr.parentNode.insertBefore(row, tr.nextSibling);
 
-  const qBox = row.querySelector('.bp-q'), aBox = row.querySelector('.bp-a');
-  qBox.checked = bulkOpts.qty; aBox.checked = bulkOpts.ad;
+  const boxes = {};
+  row.querySelectorAll('.bp-c').forEach(cb=>{
+    boxes[cb.dataset.k] = cb;
+    cb.checked = !!bulkOpts[cb.dataset.k];
+  });
   let scope = bulkOpts.scope || 'after';
+  let plan;
   const refresh = ()=>{
-    const plan = spreadPlan(p, m, scope);
+    plan = spreadPlan(p, m, scope);
     row.querySelectorAll('[data-role="bp-scope"] button').forEach(b=>
       b.classList.toggle('on', b.dataset.sc===scope));
     row.querySelector('.bp-title').innerHTML =
       `${m}월 값을 <b>${plan.rangeFrom}월~${plan.rangeTo}월</b>에 적용`;
-    row.querySelector('[data-role="bp-qv"]').textContent = won(plan.q)+'개';
-    row.querySelector('[data-role="bp-av"]').textContent = won(wonToDisp(plan.a))+'원';
-    const qc = row.querySelector('[data-role="bp-qc"]'), ac = row.querySelector('[data-role="bp-ac"]');
-    qc.textContent = plan.qChanged.length ? plan.qChanged.length+'개 달 변경' : '변경 없음';
-    ac.textContent = plan.aChanged.length ? plan.aChanged.length+'개 달 변경' : '변경 없음';
-    qc.classList.toggle('none', plan.qChanged.length===0);
-    ac.classList.toggle('none', plan.aChanged.length===0);
-    const n = (qBox.checked?plan.qChanged.length:0) + (aBox.checked?plan.aChanged.length:0);
-    const names = [qBox.checked&&plan.qChanged.length?'수량':null, aBox.checked&&plan.aChanged.length?'광고비':null].filter(Boolean);
+    let n = 0; const names = [];
+    BULK_ITEMS.forEach(it=>{
+      row.querySelector(`[data-role="v-${it.key}"]`).textContent = it.fmt(plan.vals[it.key]);
+      const c = plan.changed[it.key].length;
+      const el = row.querySelector(`[data-role="c-${it.key}"]`);
+      el.textContent = c ? c+'개 달' : '동일';
+      el.classList.toggle('none', c===0);
+      if(boxes[it.key].checked && c){ n += c; names.push(it.label); }
+    });
     row.querySelector('[data-role="bp-hint"]').textContent =
       n ? `${names.join('·')} 변경 · 되돌리기 가능` : '변경할 항목이 없습니다';
     row.querySelector('.bp-apply').disabled = (n===0);
-    return plan;
   };
-  let plan = refresh();
+  refresh();
   row.querySelectorAll('[data-role="bp-scope"] button').forEach(b=>
-    b.addEventListener('click', e=>{ e.preventDefault(); scope = b.dataset.sc; plan = refresh(); }));
-  qBox.addEventListener('change', ()=>{ plan = refresh(); });
-  aBox.addEventListener('change', ()=>{ plan = refresh(); });
+    b.addEventListener('click', e=>{ e.preventDefault(); scope = b.dataset.sc; refresh(); }));
+  Object.values(boxes).forEach(cb=> cb.addEventListener('change', refresh));
   row.querySelector('.bp-cancel').addEventListener('click', closeBulkPanel);
   row.querySelector('.bp-apply').addEventListener('click', ()=>{
-    bulkOpts = { qty: qBox.checked, ad: aBox.checked, scope };
-    if(!bulkOpts.qty && !bulkOpts.ad){ closeBulkPanel(); return; }
-    const labels = [bulkOpts.qty?'수량':null, bulkOpts.ad?'광고비':null].filter(Boolean).join('·');
+    const opt = { scope };
+    BULK_ITEMS.forEach(it=> opt[it.key] = boxes[it.key].checked);
+    bulkOpts = opt;
+    const labels = BULK_ITEMS.filter(it=>opt[it.key]).map(it=>it.label).join('·');
+    if(!labels){ closeBulkPanel(); return; }
     commitUndo(); markAction(`일괄 ${labels} (${plan.rangeFrom}월~${plan.rangeTo}월)`);
-    spreadApply(p, plan, bulkOpts);
+    spreadApply(p, plan, opt);
     closeBulkPanel();
     buildMonthGroups(); updateDerived(); scheduleSave();
     flash(`${plan.rangeFrom}월~${plan.rangeTo}월 ${labels} 적용`, false);
   });
+}
+function openMonthPanel(tr, p){
+  const existing = tr.nextElementSibling;
+  const wasMine = existing && existing.classList.contains('bulk-panel') && existing.dataset.kind==='month';
+  closeBulkPanel();
+  if(wasMine) return;
+  const row = document.createElement('tr');
+  row.className = 'bulk-panel'; row.dataset.kind = 'month';
+  row.innerHTML = `<td colspan="${tr.children.length}"><div class="bp-box">
+      <div class="bp-title">출시월 변경 — <b>${escHtml(p.name||'이름 없음')}</b></div>
+      <div class="mp-grid">${MONTHS_ALL.map(mm=>
+        `<button class="mp-b${mm===Number(p.month)?' on':''}" data-m="${mm}">${mm}월</button>`).join('')}</div>
+      <div class="bp-act">
+        <span class="bp-hint">월별 수량·광고비가 함께 이동합니다</span>
+        <button class="bp-cancel">닫기</button>
+      </div></div></td>`;
+  tr.parentNode.insertBefore(row, tr.nextSibling);
+  row.querySelector('.bp-cancel').addEventListener('click', closeBulkPanel);
+  row.querySelectorAll('.mp-b').forEach(b=> b.addEventListener('click', ()=>{
+    if(Number(b.dataset.m) === Number(p.month)){ closeBulkPanel(); return; }
+    changeLaunchMonth(p, b.dataset.m);
+  }));
+}
+function changeLaunchMonth(p, newMonth){
+  const from = Math.min(12, Math.max(1, Number(p.month)||1));
+  const to   = Math.min(12, Math.max(1, Number(newMonth)||1));
+  if(from === to) return false;
+  const delta = to - from;
+  const oldMonths = prodMonths(p);
+  const moved = {}; MONTHLY_MAPS.forEach(k=> moved[k] = {});
+  let cut = 0;
+  oldMonths.forEach(m=>{
+    const nm = m + delta;
+    if(nm >= 1 && nm <= 12){
+      MONTHLY_MAPS.forEach(k=>{ moved[k][nm] = numVal(p[k][m]); });
+    }else if(numVal(p.monthlyQty[m]) > 0 || numVal(p.monthlyAd[m]) > 0){
+      cut++;
+    }
+  });
+  const newDur = Math.max(1, Math.min(numVal(p.salesMonths) || 1, 13 - to));
+  if(cut > 0){
+    const msg = `${from}월 → ${to}월 로 옮기면 판매기간이 12월을 넘어\n`
+      + `값이 입력된 ${cut}개 달이 잘립니다.\n\n`
+      + `판매기간도 ${numVal(p.salesMonths)}개월 → ${newDur}개월 로 조정됩니다.\n\n`
+      + `계속할까요? (실행 취소로 되돌릴 수 있습니다)`;
+    if(!confirm(msg)) return false;
+  }
+  commitUndo(); markAction(`출시월 변경 (${p.name||'이름 없음'} ${from}월→${to}월)`);
+  p.month = to;
+  p.salesMonths = newDur;
+  MONTHLY_MAPS.forEach(k=>{ p[k] = moved[k]; });
+  ensureMonthly(p);
+  closeBulkPanel();
+  buildMonthGroups(); updateDerived(); scheduleSave();
+  flash(`${p.name||'제품'} 출시월 ${from}월 → ${to}월` + (cut?` · ${cut}개 달 잘림`:''), false);
+  return true;
 }
 function moveProduct(fromId, targetId, placeAfter){
   const arr = state.products;
@@ -2176,7 +2377,7 @@ function buildMonthGroups(){
         tr.className = (isLaunch ? 'launch-row' : 'cont-row') + (cls ? ' '+cls : '');
         const nameCell = isLaunch
           ? `<div class="p-name-row"><span class="drag-grip p-grip" title="드래그해서 순서 변경">⠿</span><input class="p-name" value="${escAttr(p.name)}" placeholder="제품명 입력" /></div>
-             <div class="row-hint"><span data-role="p-annual"></span></div>`
+             <div class="row-hint"><span class="p-month" title="클릭해서 출시월 변경">${p.month}월 출시</span><span data-role="p-annual"></span></div>`
           : `<span class="cont-name" data-role="ro-name">${escHtml(p.name || '(제품명 미입력)')}</span><span class="carry-from">${p.month}월</span>`;
         const dash = `<span class="ro-dash">–</span>`;
         tr.innerHTML = `
@@ -2190,9 +2391,9 @@ function buildMonthGroups(){
           <td class="mth margin-val" data-role="p-margin"></td>
           <td class="attr"><div class="dur-cell"><input class="num-inp p-dur" inputmode="decimal" value="${p.salesMonths}" /><button class="even-btn" title="이 달의 수량·광고비를 일괄 적용합니다. 범위(이 달부터 / 전체 기간)와 항목(수량 / 광고비)을 골라 적용할 수 있습니다.">일괄</button></div></td>
           <td class="attr"><input class="num-inp p-won" data-f="price" inputmode="decimal" value="${wonDisplay(wonToDisp(p.price))}" /></td>
-          <td class="attr"><input class="num-inp p-plain" data-f="costRate" inputmode="decimal" value="${p.costRate}" /></td>
-          <td class="attr"><input class="num-inp p-plain" data-f="feeRate" inputmode="decimal" value="${p.feeRate}" /></td>
-          <td class="attr"><input class="num-inp p-won" data-f="shippingPerUnit" inputmode="decimal" value="${wonDisplay(wonToDisp(p.shippingPerUnit))}" /></td>
+          <td class="attr"><input class="num-inp m-plain" data-mf="monthlyCost" inputmode="decimal" value="${pctNum(monthCost(p,m))}" /></td>
+          <td class="attr"><input class="num-inp m-plain" data-mf="monthlyFee" inputmode="decimal" value="${pctNum(monthFee(p,m))}" /></td>
+          <td class="attr"><input class="num-inp m-won" data-mf="monthlyShip" inputmode="decimal" value="${wonDisplay(wonToDisp(monthShip(p,m)))}" /></td>
           <td>${isLaunch ? `<input class="p-note" value="${escAttr(p.note)}" placeholder="비고" />` : ''}</td>
           <td>${isLaunch ? `<button class="del-btn" title="삭제">×</button>` : ''}</td>`;
         tbody.appendChild(tr);
@@ -2207,8 +2408,20 @@ function buildMonthGroups(){
         tr.querySelectorAll('.p-won').forEach(inp=>{
           wireWonInput(inp, v=>{ p[inp.dataset.f] = wonFromDisp(v); updateDerived(); scheduleSave(); });
         });
-        tr.querySelectorAll('.p-plain').forEach(inp=>{
-          inp.addEventListener('input', e=>{ p[inp.dataset.f] = e.target.value; updateDerived(); scheduleSave(); });
+        /* 월별 항목(원가율·수수료율·배송비)은 그 달 값만 바꾼다 */
+        tr.querySelectorAll('.m-plain').forEach(inp=>{
+          inp.addEventListener('input', e=>{
+            ensureMonthly(p);
+            p[inp.dataset.mf][m] = e.target.value;   // 비율은 단위 변환 없이 그대로
+            updateDerived(); scheduleSave();
+          });
+        });
+        tr.querySelectorAll('.m-won').forEach(inp=>{
+          wireWonInput(inp, v=>{
+            ensureMonthly(p);
+            p[inp.dataset.mf][m] = wonFromDisp(v);
+            updateDerived(); scheduleSave();
+          });
         });
         tr.querySelector('.p-dur').addEventListener('change', e=>{
           /* 값이 실제로 바뀌지 않았으면 아무것도 하지 않는다.
@@ -2263,6 +2476,8 @@ function buildMonthGroups(){
             const after = tr.classList.contains('drop-below');
             moveProduct(dragProdId, p.id, after);
           });
+          const mbtn = tr.querySelector('.p-month');
+          if(mbtn) mbtn.addEventListener('click', e=>{ e.stopPropagation(); openMonthPanel(tr, p); });
           wireTextInput(tr.querySelector('.p-name'),  v=>{ p.name = v;  updateDerived(); scheduleSave(); });
           wireTextInput(tr.querySelector('.p-brand'), v=>{ p.brand = v; updateDerived(); scheduleSave(); });
           wireTextInput(tr.querySelector('.p-note'),  v=>{ p.note = v;  scheduleSave(); });
@@ -2353,8 +2568,8 @@ function updateMonthDerived(){
       if(ann){
         const c = computeProduct(p);
         ann.textContent = (c.totalQty > 0)
-          ? `${c.months.length}개월 · 연 ${fmtDetail(c.revFY)} · ${won(c.totalQty)}개`
-          : `${c.months.length}개월 · 수량 미입력`;
+          ? ` · ${c.months.length}개월 · ${fmtDetail(c.revFY)} · ${won(c.totalQty)}개`
+          : ` · ${c.months.length}개월 · 수량 미입력`;
       }
       // 이어지는 행의 읽기전용 값은 출시월 값이 바뀌면 함께 갱신되어야 함
       const setRO = (role, val)=>{ const el = tr.querySelector('[data-role="'+role+'"]'); if(el) el.textContent = val; };
@@ -2462,11 +2677,12 @@ function targetPerMonthFn(isProfit){
   const h2 = isProfit ? t2.profit : t2.rev;
   return m => (Number(m) <= 6 ? h1/6 : h2/6);
 }
-let chartHover = [];
+let chartHover = [], chartProdSeries = [];
 function updateMainChart(){
   const months = activeMonths();
   const isProfit = state.chartBasis === 'profit';
-  const isCum = state.chartView === 'cum';
+  const isGap  = (state.chartView||'gap') === 'gap';
+  const isProd = state.chartView === 'product';
   const W=1040,H=272,padL=52,padR=16,padT=14,padB=26;
   const U = unitLabel();
   const nm = isProfit ? '공헌이익' : '매출';
@@ -2474,10 +2690,11 @@ function updateMainChart(){
   const cNew  = isProfit ? '#9A6B00' : '#1F3A5F';
   const cCum  = isProfit ? '#166A3C' : '#1D5FA8';
 
+  if(!isProd) chartProdSeries = [];
   const tpm = targetPerMonthFn(isProfit);
   const rows = months.map(m=>{
-    const bRev = state.baseline.reduce((s,b)=>s+numVal(b.monthly[m-1]),0)*scenOf(m)/vatDiv();
-    const bPro = state.baseline.reduce((s,b)=>s+numVal(b.monthly[m-1])*(numVal(b.marginRate)/100),0)*scenOf(m)/vatDiv();
+    const bRev = state.baseline.reduce((s,b)=>s+numVal(b.monthly[m-1]),0)*scenOf(m)/blVatDiv();
+    const bPro = state.baseline.reduce((s,b)=>s+numVal(b.monthly[m-1])*(numVal(b.marginRate)/100),0)*scenOf(m)/blVatDiv();
     let nRev=0,nPro=0;
     state.products.forEach(p=>{ nRev+=prodRevIn(p,[m]); nPro+=prodProfitIn(p,[m]); });
     const rev=bRev+nRev, pro=bPro+nPro;
@@ -2492,7 +2709,69 @@ function updateMainChart(){
   const xb = i => padL + i*bandW + bandW/2;
   let svg='', legend='';
 
-  if(!isCum){
+  /* 제품별 보기: 기여가 큰 제품부터 최대 8개 + 기타 로 묶는다
+     (제품 수가 많아지면 색 구분이 불가능해지므로) */
+  const PROD_COLORS = ['#1F3A5F','#2E7D5B','#8C5A1E','#6A3894','#1D6F8C','#A33A3A','#4E6B22','#7A5C9E'];
+  let prodSeries = [];
+  if(isProd){
+    const vals = state.products.map(p=>({
+      p, name: p.name || '(제품명 미입력)',
+      tot: months.reduce((s,m)=> s + (isProfit ? prodProfitIn(p,[m]) : prodRevIn(p,[m])), 0),
+      per: months.map(m=> isProfit ? prodProfitIn(p,[m]) : prodRevIn(p,[m]))
+    })).filter(x=> x.per.some(v=>Math.abs(v) > 0.0005));
+    vals.sort((a,b)=> b.tot - a.tot);
+    const top = vals.slice(0, 8), rest = vals.slice(8);
+    prodSeries = top.map((x,i)=>({ name:x.name, per:x.per, color:PROD_COLORS[i % PROD_COLORS.length] }));
+    if(rest.length){
+      prodSeries.push({
+        name: `기타 ${rest.length}개`,
+        per: months.map((m,i)=> rest.reduce((s,x)=>s+x.per[i], 0)),
+        color: '#9AA3AF'
+      });
+    }
+  }
+
+  if(isProd){
+    chartProdSeries = prodSeries;
+    const maxVal = Math.max(...rows.map(r=>Math.max(r.total, r.tgt)), 0.001) * 1.20;
+    const f = svgFrame(W,H,padL,padR,padT,padB,maxVal);
+    const floor = padT+f.plotH;
+    const barW = Math.min(40, bandW*0.56);
+    let bars='';
+    rows.forEach((r,i)=>{
+      const cx=xb(i), rx=cx-barW/2;
+      /* 베이스라인을 바닥에 깔아 목표선과 같은 축에서 비교되게 한다 */
+      let acc = r.base;
+      const yB = f.yFor(r.base);
+      bars += `<rect x="${rx}" y="${yB}" width="${barW}" height="${Math.max(0,floor-yB)}" fill="${cBase}" opacity="0.55" />`;
+      prodSeries.forEach(sr=>{
+        const v = sr.per[i];
+        if(Math.abs(v) < 0.0005) return;
+        const y0 = f.yFor(acc), y1 = f.yFor(acc + v);
+        bars += `<rect x="${rx}" y="${Math.min(y0,y1)}" width="${barW}" height="${Math.max(0.6,Math.abs(y0-y1))}" fill="${sr.color}" />`;
+        acc += v;
+      });
+      bars += `<text x="${cx}" y="${f.yFor(r.total)-5}" text-anchor="middle" font-size="9.5" fill="#3A4250" font-family="IBM Plex Mono, monospace">${fmtDetail(r.total)}</text>`;
+      bars += `<text x="${cx}" y="${H-8}" text-anchor="middle" font-size="10.5" fill="#1A1D23" font-family="IBM Plex Mono, monospace">${String(r.m).padStart(2,'0')}</text>`;
+    });
+    let step='';
+    rows.forEach((r,i)=>{
+      const x1 = padL + i*bandW, x2 = x1 + bandW, y = f.yFor(r.tgt);
+      step += `<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="#B3261E" stroke-width="1.8" stroke-dasharray="6,4" opacity="0.85" />`;
+      const prev = rows[i-1];
+      if(prev && Math.abs(prev.tgt - r.tgt) > 1e-9)
+        step += `<line x1="${x1}" y1="${f.yFor(prev.tgt)}" x2="${x1}" y2="${y}" stroke="#B3261E" stroke-width="1.4" stroke-dasharray="3,3" opacity="0.6" />`;
+      if(i===0 || (prev && Math.abs(prev.tgt-r.tgt)>1e-9))
+        step += `<text x="${x1+4}" y="${y-5}" font-size="9.5" fill="#B3261E" font-family="IBM Plex Mono, monospace">월 목표 ${fmtDetail(r.tgt)}</text>`;
+    });
+    svg = `${f.grid}${f.labels}${bars}${step}${halfDivider(months,padL,bandW,padT,floor)}`;
+    legend = `<span class="lg"><span class="sw" style="background:${cBase};opacity:.55;"></span>베이스라인</span>`
+      + prodSeries.map(sr=>`<span class="lg"><span class="sw" style="background:${sr.color};"></span>${escHtml(sr.name)}</span>`).join('')
+      + `<span class="lg"><span class="sw" style="background:#B3261E;opacity:.85;"></span>월 목표</span>`
+      + `<span class="lg" style="color:var(--navy-deep);font-weight:700;">${nm} · ${U}</span>`;
+    chartProdSeries = prodSeries;
+    svg += hoverBands(rows,padL,bandW,padT,f.plotH);
+  }else if(!isGap){
     const maxVal = Math.max(...rows.map(r=>Math.max(r.total, r.tgt)), 0.001) * 1.20;
     const f = svgFrame(W,H,padL,padR,padT,padB,maxVal);
     const floor = padT+f.plotH;
@@ -2527,34 +2806,91 @@ function updateMainChart(){
       <span class="lg" style="color:var(--navy-deep);font-weight:700;">${U}</span>`;
     svg += hoverBands(rows,padL,bandW,padT,f.plotH);
   }else{
-    const maxVal = Math.max(...rows.map(r=>Math.max(r.cum, r.cumT)), 0.001) * 1.14;
-    const f = svgFrame(W,H,padL,padR,padT,padB,maxVal);
-    const floor = padT+f.plotH;
-    const pace = `<polyline points="${rows.map((r,i)=>`${xb(i)},${f.yFor(r.cumT)}`).join(' ')}" fill="none" stroke="#B3261E" stroke-width="1.8" stroke-dasharray="5,4" opacity="0.8" />`;
-    const line = `<polyline points="${rows.map((r,i)=>`${xb(i)},${f.yFor(r.cum)}`).join(' ')}" fill="none" stroke="${cCum}" stroke-width="2.4" />`;
-    const dots = rows.map((r,i)=>`<circle cx="${xb(i)}" cy="${f.yFor(r.cum)}" r="3.5" fill="${cCum}" />`).join('');
-    const last = rows[rows.length-1];
-    const gap = last.cum - last.cumT;
-    const gapTxt = `<text x="${xb(rows.length-1)}" y="${f.yFor(last.cum)-11}" text-anchor="end" font-size="11" font-weight="700" fill="${gap>=0?'#166A3C':'#B3261E'}" font-family="IBM Plex Mono, monospace">${gap>=0?'+':''}${fmtDetail(gap)}</text>`;
-    const labels = rows.map((r,i)=>`<text x="${xb(i)}" y="${H-8}" text-anchor="middle" font-size="10.5" fill="#1A1D23" font-family="IBM Plex Mono, monospace">${String(r.m).padStart(2,'0')}</text>`).join('');
-    svg = `${f.grid}${f.labels}${labels}${halfDivider(months,padL,bandW,padT,floor)}${pace}${line}${dots}${gapTxt}`;
-    legend = `
-      <span class="lg"><span class="sw" style="background:${cCum};"></span>누적 ${nm} (1월부터 그 달까지 합계)</span>
-      <span class="lg"><span class="sw" style="background:#B3261E;opacity:.8;"></span>목표 페이스 (상·하반기 배분 반영)</span>
-      <span class="lg" style="color:var(--navy-deep);font-weight:700;">우측 숫자 = 마지막 달 목표 대비 격차</span>`;
-    svg += hoverBands(rows,padL,bandW,padT,f.plotH);
-  }
+    /* ===== 목표 갭 =====
+       막대 = 월별 목표 대비 차이, 선 = 누적 갭.
+       두 값의 크기 차가 크므로(월 ±2 vs 누적 ±9) 좌/우 축을 따로 두되
+       0선을 같은 높이에 맞춰 왜곡 없이 겹쳐 읽히게 한다. */
+    const CUM = '#1F3A5F';                 // 누적선: 초과(녹)·미달(적) 막대와 색을 분리
+    const padRg = 46;                      // 우측 축 라벨 공간
+    const gapM = rows.map(r=> r.total - r.tgt);
+    const gapC = rows.map(r=> r.cum - r.cumT);
+    const maxM = Math.max(...gapM.map(Math.abs), 0.001) * 1.25;
+    const maxC = Math.max(...gapC.map(Math.abs), 0.001) * 1.15;
+    const plotH = H - padT - padB;
+    const zeroY = padT + plotH/2;                 // 0선을 정중앙에 고정
+    const yM = v => zeroY - (v/maxM) * (plotH/2);
+    const yC = v => zeroY - (v/maxC) * (plotH/2);
 
+    let grid = '', labels = '';
+    [-1,-0.5,0,0.5,1].forEach(f=>{
+      const y = zeroY - f*(plotH/2);
+      grid += `<line x1="${padL}" y1="${y}" x2="${W-padRg}" y2="${y}" stroke="${f===0?'#8B93A0':'#E3E7EC'}" stroke-width="${f===0?1.4:1}" ${f===0?'':'stroke-dasharray="3,3"'} />`;
+      labels += `<text x="${padL-7}" y="${y+3.5}" text-anchor="end" font-size="9.5" fill="#7C93AC" font-family="IBM Plex Mono, monospace">${fmtDetail(maxM*f)}</text>`;
+      labels += `<text x="${W-padRg+7}" y="${y+3.5}" font-size="9.5" fill="${CUM}" font-family="IBM Plex Mono, monospace">${fmtDetail(maxC*f)}</text>`;
+    });
+
+    const bandWg = (W-padL-padRg)/months.length;
+    const xbg = i => padL + i*bandWg + bandWg/2;
+    const barW = Math.min(34, bandWg*0.46);
+    let bars = '';
+    rows.forEach((r,i)=>{
+      const g = gapM[i], cx = xbg(i), rx = cx - barW/2;
+      const y0 = yM(0), y1 = yM(g);
+      const col = g >= 0 ? '#2E7D5B' : '#B3261E';
+      bars += `<rect x="${rx}" y="${Math.min(y0,y1)}" width="${barW}" height="${Math.max(1,Math.abs(y1-y0))}" fill="${col}" opacity="0.9" />`;
+      bars += `<text x="${cx}" y="${g>=0 ? y1-5 : y1+12}" text-anchor="middle" font-size="9.5" font-weight="700" fill="${col}" font-family="IBM Plex Mono, monospace">${g>=0?'+':''}${fmtDetail(g)}</text>`;
+      bars += `<text x="${cx}" y="${H-8}" text-anchor="middle" font-size="10.5" fill="#1A1D23" font-family="IBM Plex Mono, monospace">${String(r.m).padStart(2,'0')}</text>`;
+    });
+
+    const cumPts = rows.map((r,i)=>`${xbg(i)},${yC(gapC[i])}`).join(' ');
+    const cumLine = `<polyline points="${cumPts}" fill="none" stroke="${CUM}" stroke-width="2.6" />`
+      + rows.map((r,i)=>`<circle cx="${xbg(i)}" cy="${yC(gapC[i])}" r="3.2" fill="${CUM}" />`).join('');
+    const last = gapC[gapC.length-1];
+    const endTxt = `<text x="${xbg(rows.length-1)}" y="${yC(last) + (last>=0?-11:16)}" text-anchor="end" font-size="11.5" font-weight="700" fill="${last>=0?CUM:'#B3261E'}" font-family="IBM Plex Mono, monospace">누적 ${last>=0?'+':''}${fmtDetail(last)}</text>`;
+
+    /* 누적 갭이 0을 넘어서는 달을 표시 — '언제 뒤집히는가' */
+    let cross = '';
+    for(let i=1;i<gapC.length;i++){
+      if(gapC[i-1] < 0 && gapC[i] >= 0){
+        const x = xbg(i);
+        cross = `<line x1="${x}" y1="${padT}" x2="${x}" y2="${padT+plotH}" stroke="${CUM}" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.55" />`
+          + `<text x="${x+5}" y="${padT+11}" font-size="9.5" font-weight="700" fill="${CUM}">${rows[i].m}월 누적 흑자 전환</text>`;
+        break;
+      }
+    }
+    svg = `${grid}${labels}${halfDivider(months,padL,bandWg,padT,padT+plotH)}${cross}${bars}${cumLine}${endTxt}`;
+    legend = `
+      <span class="lg"><span class="sw" style="background:#2E7D5B;"></span>월 목표 초과</span>
+      <span class="lg"><span class="sw" style="background:#B3261E;"></span>월 목표 미달</span>
+      <span class="lg"><span class="sw" style="background:#1F3A5F;"></span>누적 갭 (우측 축)</span>
+      <span class="lg" style="color:var(--navy-deep);font-weight:700;">${nm} · ${U}</span>`;
+    svg += hoverBands(rows,padL,bandWg,padT,plotH);
+  }
   const holder = document.getElementById('chart-holder');
   holder.innerHTML =
     `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block;background:#fff;">${svg}</svg>
      <div class="chart-tip" id="chart-tip"></div>`;
-  wireChartHover(holder, isProfit, isCum);
+  wireChartHover(holder, isProfit);
   document.getElementById('chart-legend').innerHTML = legend;
+  /* 상단 한 줄 요약: 연말 전망 / 목표 / 갭 / 달성률 */
+  const hl = document.getElementById('chart-headline');
+  if(hl){
+    const fin = rows.length ? rows[rows.length-1].cum : 0;
+    const fTg = rows.length ? rows[rows.length-1].cumT : 0;
+    const d = fin - fTg;
+    const rate = fTg > 0 ? Math.round(fin/fTg*100) : 0;
+    hl.innerHTML = `
+      <span class="hl-item"><span class="hl-k">${periodLabel(state.viewPeriod)} 전망 ${nm}</span><b>${fmtDetail(fin)} ${U}</b></span>
+      <span class="hl-sep">·</span>
+      <span class="hl-item"><span class="hl-k">목표</span><b>${fmtDetail(fTg)}</b></span>
+      <span class="hl-sep">·</span>
+      <span class="hl-item"><span class="hl-k">갭</span><b class="${d>=0?'pos':'neg'}">${d>=0?'+':''}${fmtDetail(d)}</b></span>
+      <span class="hl-item hl-rate ${d>=0?'pos':'neg'}">달성률 ${rate}%</span>`;
+  }
   document.querySelectorAll('#basis-toggle button').forEach(b=>
     b.classList.toggle('active', (b.dataset.b==='profit')===isProfit));
   document.querySelectorAll('#view-toggle button').forEach(b=>
-    b.classList.toggle('active', (b.dataset.v==='cum')===isCum));
+    b.classList.toggle('active', b.dataset.v===(state.chartView||'month')));
 }
 function halfDivider(months,padL,bandW,padT,floor){
   if(state.viewPeriod!=='all') return '';
@@ -2569,7 +2905,7 @@ function hoverBands(rows,padL,bandW,padT,plotH){
     `<rect class="hv" data-i="${i}" x="${padL+i*bandW}" y="${padT}" width="${bandW}" height="${plotH}" fill="transparent" style="cursor:crosshair" />`
   ).join('');
 }
-function wireChartHover(holder, isProfit, isCum){
+function wireChartHover(holder, isProfit){
   const tip = holder.querySelector('#chart-tip');
   const show = (i, ev)=>{
     const r = chartHover[i]; if(!r) return;
@@ -2581,7 +2917,14 @@ function wireChartHover(holder, isProfit, isCum){
     tip.innerHTML = `
       <div class="ct-h">${r.m}월</div>
       <div class="ct-r"><span>베이스라인</span><b>${fmtDetail(r.base)}</b></div>
-      <div class="ct-r"><span>신규 출시</span><b>${fmtDetail(r.nw)}</b></div>
+      ${(()=>{
+        if(state.chartView !== 'product' || !chartProdSeries.length)
+          return `<div class="ct-r"><span>신규 출시</span><b>${fmtDetail(r.nw)}</b></div>`;
+        /* 그 달에 값이 있는 제품만 (0 인 제품까지 나열하면 툴팁이 길어진다) */
+        const live = chartProdSeries.filter(sr=> Math.abs(sr.per[i]) >= 0.0005);
+        if(!live.length) return `<div class="ct-r"><span>신규 출시</span><b>–</b></div>`;
+        return live.map(sr=>`<div class="ct-r"><span><i class="ct-dot" style="background:${sr.color}"></i>${escHtml(sr.name)}</span><b>${fmtDetail(sr.per[i])}</b></div>`).join('');
+      })()}
       <div class="ct-r tot"><span>${isProfit?'공헌이익':'매출'} 합계</span><b>${fmtDetail(r.total)} ${U}</b></div>
       <div class="ct-r"><span>이익률</span><b>${mg}</b></div>
       <div class="ct-sep"></div>
@@ -2690,10 +3033,11 @@ function updateLaunchSummary(){
   });
   let rows = Object.entries(map).map(([k,v])=>({k, ...v}));
   if(dim==='month') rows.sort((a,b)=>parseInt(a.k)-parseInt(b.k));
-  else rows.sort((a,b)=>b.rev-a.rev);
+  else rows.sort((a,b)=>b.pro-a.pro);
   const T = rows.reduce((s,r)=>({cnt:s.cnt+r.cnt, rev:s.rev+r.rev, pro:s.pro+r.pro,
     r1:s.r1+r.r1, p1:s.p1+r.p1, r2:s.r2+r.r2, p2:s.p2+r.p2}), blank());
-  const maxRev = Math.max(...rows.map(r=>r.rev), 0.001);
+  /* 최우선 지표가 공헌이익이므로 정렬·비중 모두 이익 기준 */
+  const maxPro = Math.max(...rows.map(r=>Math.abs(r.pro)), 0.001);
   const label = dim==='type' ? '전략 유형' : (dim==='brand' ? '브랜드' : '출시 월');
   const mgCls = m => m>=25?'good':(m>=15?'mid':'low');
   const mg = (pf,rv)=> rv>0 ? pct1(pf/rv*100) : '–';
@@ -2703,32 +3047,37 @@ function updateLaunchSummary(){
          <th class="g-h1" colspan="2">상반기</th><th class="g-h2" colspan="2">하반기</th>
          <th class="g-tot" colspan="4">${periodLabel('all')}</th></tr>
        <tr class="col"><th>${label}</th><th>출시 건수</th>
-         <th class="h1h">매출</th><th class="h1h">공헌이익</th>
-         <th class="h2h">매출</th><th class="h2h">공헌이익</th>
-         <th>매출</th><th>공헌이익</th><th>이익률</th><th>매출 비중</th></tr>`
-    : `<tr class="col"><th>${label}</th><th>출시 건수</th><th>매출</th><th>공헌이익</th><th>이익률</th><th>매출 비중</th></tr>`;
+         <th class="h1h">공헌이익</th><th class="h1h">매출</th>
+         <th class="h2h">공헌이익</th><th class="h2h">매출</th>
+         <th>공헌이익</th><th>매출</th><th>이익률</th><th>이익 비중</th></tr>`
+    : `<tr class="col"><th>${label}</th><th>출시 건수</th><th>공헌이익</th><th>매출</th><th>이익률</th><th>이익 비중</th></tr>`;
   const cg = showHalf
     ? `<colgroup><col style="width:15%"><col style="width:7%">
         <col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:9%">
         <col style="width:9.5%"><col style="width:9.5%"><col style="width:7%"><col style="width:16%"></colgroup>`
     : `<colgroup><col style="width:20%"><col style="width:11%"><col style="width:15%">
         <col style="width:15%"><col style="width:11%"><col style="width:28%"></colgroup>`;
-  const bar = r => `<td class="bar-cell"><span class="ratio-inline">
-      <span class="mini-bar-track" style="flex:1 1 auto;min-width:40px"><span class="mini-bar-fill" style="width:${Math.max(1,Math.round(r.rev/maxRev*100))}%"></span></span>
-      <span class="ratio-num">${T.rev>0?Math.round(r.rev/T.rev*100):0}%</span></span></td>`;
+  const bar = r => {
+    const neg = r.pro < 0;
+    const w = Math.max(2, Math.round(Math.abs(r.pro)/maxPro*100));
+    const share = T.pro !== 0 ? Math.round(r.pro/T.pro*100) : 0;
+    return `<td class="bar-cell"><span class="ratio-inline">
+      <span class="mini-bar-track" style="flex:1 1 auto;min-width:40px"><span class="mini-bar-fill${neg?' neg':''}" style="width:${w}%"></span></span>
+      <span class="ratio-num${neg?' neg':''}">${share}%</span></span></td>`;
+  };
 
   document.getElementById('launch-summary').innerHTML = `${cg}<thead>${head}</thead>
     <tbody>${rows.length ? rows.map(r=>{
       const m = r.rev>0 ? r.pro/r.rev*100 : 0;
       return `<tr><td class="${dim==='month'?'lbl-c':''}">${escHtml(r.k)}</td><td>${r.cnt?r.cnt+'건':'–'}</td>`
-        + (showHalf ? `<td class="h1c">${fmtCell(r.r1)}</td><td class="h1c sub">${fmtCell(r.p1)}</td>
-             <td class="h2c">${fmtCell(r.r2)}</td><td class="h2c sub">${fmtCell(r.p2)}</td>` : '')
-        + `<td>${fmtCell(r.rev)}</td><td class="sub">${fmtCell(r.pro)}</td>
+        + (showHalf ? `<td class="h1c sub">${fmtCell(r.p1)}</td><td class="h1c">${fmtCell(r.r1)}</td>
+             <td class="h2c sub">${fmtCell(r.p2)}</td><td class="h2c">${fmtCell(r.r2)}</td>` : '')
+        + `<td class="sub">${fmtCell(r.pro)}</td><td>${fmtCell(r.rev)}</td>
            <td class="margin-val ${mgCls(m)}">${mg(r.pro,r.rev)}</td>${bar(r)}</tr>`;
     }).join('') : `<tr><td colspan="${showHalf?10:6}" style="text-align:center;color:var(--muted);padding:16px;">신규 출시 제품이 없습니다</td></tr>`}
     ${rows.length ? `<tr class="tot-row"><td>합계</td><td>${T.cnt}건</td>`
-      + (showHalf ? `<td>${fmtCell(T.r1)}</td><td>${fmtCell(T.p1)}</td><td>${fmtCell(T.r2)}</td><td>${fmtCell(T.p2)}</td>` : '')
-      + `<td>${fmtCell(T.rev)}</td><td>${fmtCell(T.pro)}</td><td>${mg(T.pro,T.rev)}</td><td></td></tr>` : ''}</tbody>`;
+      + (showHalf ? `<td>${fmtCell(T.p1)}</td><td>${fmtCell(T.r1)}</td><td>${fmtCell(T.p2)}</td><td>${fmtCell(T.r2)}</td>` : '')
+      + `<td>${fmtCell(T.pro)}</td><td>${fmtCell(T.rev)}</td><td>${mg(T.pro,T.rev)}</td><td></td></tr>` : ''}</tbody>`;
   document.getElementById('sum-desc').textContent = `${periodLabel(state.viewPeriod)} · ${unitLabel()}`;
   document.querySelectorAll('#sum-dim-toggle button').forEach(b=>
     b.classList.toggle('active', b.dataset.d===dim));
@@ -2855,7 +3204,7 @@ function updateCompareTab(){
   const h1Cohort = state.products.filter(p=>Number(p.month)<=6);
   const h2Cohort = state.products.filter(p=>Number(p.month)>=7);
   const data = MONTHS_ALL.map(m=>{
-    const bRev = state.baseline.reduce((s,b)=>s+numVal(b.monthly[m-1]),0)*scenOf(m)/vatDiv();
+    const bRev = state.baseline.reduce((s,b)=>s+numVal(b.monthly[m-1]),0)*scenOf(m)/blVatDiv();
     const c1 = h1Cohort.reduce((s,p)=>s+prodRevIn(p,[m]),0);
     const c2 = h2Cohort.reduce((s,p)=>s+prodRevIn(p,[m]),0);
     return {m, bRev, c1, c2, total:bRev+c1+c2};
@@ -3021,9 +3370,9 @@ function updateCompareTab(){
       </tr>
       <tr class="col">
         <th>브랜드</th>
-        <th class="h1h">건수</th><th class="h1h">매출</th><th class="h1h">공헌이익</th>
-        <th class="h2h">건수</th><th class="h2h">매출</th><th class="h2h">공헌이익</th>
-        <th>매출</th><th>공헌이익</th><th>이익률</th><th>상 : 하 비중</th>
+        <th class="h1h">건수</th><th class="h1h">공헌이익</th><th class="h1h">매출</th>
+        <th class="h2h">건수</th><th class="h2h">공헌이익</th><th class="h2h">매출</th>
+        <th>공헌이익</th><th>매출</th><th>이익률</th><th>상 : 하 (매출)</th>
       </tr>
     </thead>
     <tbody>${brVis.length ? brVis.map(r=>{
@@ -3032,9 +3381,9 @@ function updateCompareTab(){
       const mgCls = m>=25 ? 'good' : (m>=15 ? 'mid' : 'low');
       return `<tr>
         <td>${escHtml(r.name)}</td>
-        <td class="h1c">${r.c1||'–'}</td><td class="h1c">${fmtCell(r.h1)}</td><td class="h1c sub">${fmtCell(r.p1)}</td>
-        <td class="h2c">${r.c2||'–'}</td><td class="h2c">${fmtCell(r.h2)}</td><td class="h2c sub">${fmtCell(r.p2)}</td>
-        <td>${fmtCell(r.total)}</td><td class="sub">${fmtCell(r.totalP)}</td>
+        <td class="h1c">${r.c1||'–'}</td><td class="h1c sub">${fmtCell(r.p1)}</td><td class="h1c">${fmtCell(r.h1)}</td>
+        <td class="h2c">${r.c2||'–'}</td><td class="h2c sub">${fmtCell(r.p2)}</td><td class="h2c">${fmtCell(r.h2)}</td>
+        <td class="sub">${fmtCell(r.totalP)}</td><td>${fmtCell(r.total)}</td>
         <td class="margin-val ${mgCls}">${r.total>0?pct1(m):'–'}</td>
         ${ratioCell(s1)}
       </tr>`;
@@ -3068,9 +3417,9 @@ function updateCompareTab(){
       </tr>
       <tr class="col">
         <th>구분</th>
-        <th class="h1h">건수</th><th class="h1h">매출</th><th class="h1h">이익</th>
-        <th class="h2h">건수</th><th class="h2h">매출</th><th class="h2h">이익</th>
-        <th>매출</th><th>공헌이익</th><th>이익률</th><th>상 : 하 비중</th>
+        <th class="h1h">건수</th><th class="h1h">이익</th><th class="h1h">매출</th>
+        <th class="h2h">건수</th><th class="h2h">이익</th><th class="h2h">매출</th>
+        <th>공헌이익</th><th>매출</th><th>이익률</th><th>상 : 하 (매출)</th>
       </tr>
     </thead>
     <tbody>
@@ -3079,25 +3428,25 @@ function updateCompareTab(){
         const cls = m>=25?'good':(m>=15?'mid':'low');
         return `<tr>
         <td>${escHtml(t)}</td>
-        <td class="h1c">${v.c1||'–'}</td><td class="h1c">${fmtCell(v.h1)}</td><td class="h1c sub">${fmtCell(v.h1p)}</td>
-        <td class="h2c">${v.c2||'–'}</td><td class="h2c">${fmtCell(v.h2)}</td><td class="h2c sub">${fmtCell(v.h2p)}</td>
-        <td>${fmtCell(tot)}</td><td class="sub">${fmtCell(totP)}</td>
+        <td class="h1c">${v.c1||'–'}</td><td class="h1c sub">${fmtCell(v.h1p)}</td><td class="h1c">${fmtCell(v.h1)}</td>
+        <td class="h2c">${v.c2||'–'}</td><td class="h2c sub">${fmtCell(v.h2p)}</td><td class="h2c">${fmtCell(v.h2)}</td>
+        <td class="sub">${fmtCell(totP)}</td><td>${fmtCell(tot)}</td>
         <td class="margin-val ${cls}">${tot>0?pct1(m):'–'}</td>
         ${ratioCell(tot>0?Math.round(v.h1/tot*100):0)}
       </tr>`;}).join('')}
       <tr class="base-row">
         <td>베이스라인 (기존 운영)</td>
-        <td class="h1c">–</td><td class="h1c">${fmtCell(bl1.rev)}</td><td class="h1c">${fmtCell(bl1.profit)}</td>
-        <td class="h2c">–</td><td class="h2c">${fmtCell(bl2.rev)}</td><td class="h2c">${fmtCell(bl2.profit)}</td>
-        <td>${fmtCell(bl1.rev+bl2.rev)}</td><td>${fmtCell(bl1.profit+bl2.profit)}</td>
+        <td class="h1c">–</td><td class="h1c">${fmtCell(bl1.profit)}</td><td class="h1c">${fmtCell(bl1.rev)}</td>
+        <td class="h2c">–</td><td class="h2c">${fmtCell(bl2.profit)}</td><td class="h2c">${fmtCell(bl2.rev)}</td>
+        <td>${fmtCell(bl1.profit+bl2.profit)}</td><td>${fmtCell(bl1.rev+bl2.rev)}</td>
         <td>${(bl1.rev+bl2.rev)>0 ? pct1((bl1.profit+bl2.profit)/(bl1.rev+bl2.rev)*100) : '–'}</td>
         ${ratioCell((bl1.rev+bl2.rev)>0?Math.round(bl1.rev/(bl1.rev+bl2.rev)*100):0)}
       </tr>
       <tr class="tot-row">
         <td>합계</td>
-        <td>${sum.c1}</td><td>${fmtCell(gT.h1)}</td><td>${fmtCell(gT.h1p)}</td>
-        <td>${sum.c2}</td><td>${fmtCell(gT.h2)}</td><td>${fmtCell(gT.h2p)}</td>
-        <td>${fmtCell(gT.h1+gT.h2)}</td><td>${fmtCell(gT.h1p+gT.h2p)}</td>
+        <td>${sum.c1}</td><td>${fmtCell(gT.h1p)}</td><td>${fmtCell(gT.h1)}</td>
+        <td>${sum.c2}</td><td>${fmtCell(gT.h2p)}</td><td>${fmtCell(gT.h2)}</td>
+        <td>${fmtCell(gT.h1p+gT.h2p)}</td><td>${fmtCell(gT.h1+gT.h2)}</td>
         <td>${(gT.h1+gT.h2)>0 ? pct1((gT.h1p+gT.h2p)/(gT.h1+gT.h2)*100) : '–'}</td>
         ${ratioCell((gT.h1+gT.h2)>0?Math.round(gT.h1/(gT.h1+gT.h2)*100):0)}
       </tr>
@@ -3166,6 +3515,13 @@ document.querySelectorAll('#period-toggle button').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     state.viewPeriod = btn.dataset.p;
     keepScroll(()=>{ syncControls(); buildBaselineTable(); buildMonthGroups(); updateDerived(); });
+    scheduleSave();
+  });
+});
+document.querySelectorAll('#bl-basis-toggle button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    state.blBasis = btn.dataset.b;
+    keepScroll(()=>{ buildBaselineTable(); updateDerived(); });
     scheduleSave();
   });
 });
@@ -3281,7 +3637,15 @@ document.getElementById('copy-btn').addEventListener('click', async ()=>{
     list.forEach(p=>{
       const c = computeProduct(p);
       const perMonth = c.months.map(mm=>`${mm}월 ${won(monthQty(p,mm))}개`).join(', ');
-      t += `- [${p.type}] ${p.name||'(제품명 미입력)'} (${p.brand||'-'}) : 단가 ${won(wonToDisp(p.price))}원, 원가율 ${p.costRate}%, 수수료율 ${p.feeRate}%, 배송비 ${won(wonToDisp(p.shippingPerUnit))}원/개\n`;
+      /* 월별로 다를 수 있으므로 단일값이면 그대로, 다르면 범위로 표기 */
+      const rng = (fn, suf, conv) => {
+        const vs = prodMonths(p).map(m=>numVal(fn(p,m)));
+        if(!vs.length) return '-';
+        const lo = Math.min(...vs), hi = Math.max(...vs);
+        const f = v => conv ? won(wonToDisp(v)) : pctNum(v);
+        return (lo===hi ? f(lo) : `${f(lo)}~${f(hi)}`) + suf;
+      };
+      t += `- [${p.type}] ${p.name||'(제품명 미입력)'} (${p.brand||'-'}) : 단가 ${won(wonToDisp(p.price))}원, 원가율 ${rng(monthCost,'%')}, 수수료율 ${rng(monthFee,'%')}, 배송비 ${rng(monthShip,'원/개',true)}\n`;
       t += `    판매 ${c.months.length}개월 (${perMonth}) · 광고비 ${won(wonToDisp(c.totalAd))}원 → 연매출 ${eok(c.revFY)}억 / 연이익 ${eok(c.profitFY)}억 (${c.margin}%)${p.note?' / '+p.note:''}\n`;
     });
   });
